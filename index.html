@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEGA 2560 Q&A Trainer</title>
+  <style>
+    :root {
+      --color-bg-primary: #1a2332;
+      --color-bg-secondary: #263152;
+      --color-accent: #239fff;
+      --color-accent-dark: #183985;
+      --color-text-primary: #eaf5ff;
+      --color-text-secondary: #b0bffc;
+      --color-btn: #239fff;
+      --color-btn-hover: #183985;
+      --color-border: #2e3957;
+      --color-correct: #21bfa3;
+      --color-wrong: #e05252;
+      --color-empty: #3b4257;
+      --radius: 9px;
+      --shadow: 0 2px 12px #12162277;
+      font-size: 17px;
+      font-family: 'Segoe UI', 'Cairo', Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 0;
+      padding: 24px;
+      padding-bottom: 12px;
+      background: var(--color-bg-secondary);
+      border-bottom: 2px solid var(--color-border);
+    }
+    h1, h2, h3 {
+      margin: 0 0 8px 0;
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+    .dev-by {
+      font-size: 0.96em;
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+      letter-spacing: 0.6px;
+    }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 14px 40px 14px;
+    }
+    .section-select {
+      width: 100%;
+      background: var(--color-bg-secondary);
+      border: 2px solid var(--color-border);
+      color: var(--color-text-primary);
+      padding: 13px;
+      border-radius: var(--radius);
+      font-size: 1em;
+      margin-bottom: 26px;
+      margin-top: 12px;
+      box-shadow: var(--shadow);
+      font-family: inherit;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .section-select:focus {
+      border: 2px solid var(--color-accent);
+    }
+    .card {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 21px 18px 20px 18px;
+      margin-bottom: 28px;
+      border: 2px solid var(--color-border);
+      animation: fadeIn 0.38s;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      0% { transform: translateY(22px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-top: 11px;
+    }
+    .choice-btn {
+      background: var(--color-empty);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      color: var(--color-text-primary);
+      font-size: 1em;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.2s, color 0.21s;
+    }
+    .choice-btn:hover,
+    .choice-btn:focus {
+      background: var(--color-accent-dark);
+      border-color: var(--color-accent);
+    }
+    .choice-btn.correct {
+      background: var(--color-correct);
+      color: #0d2f26;
+      border-color: var(--color-correct);
+      font-weight: bold;
+    }
+    .choice-btn.wrong {
+      background: var(--color-wrong);
+      color: #fff;
+      border-color: var(--color-wrong);
+      font-weight: bold;
+    }
+    .submit, .next-btn {
+      margin-top: 18px;
+      padding: 13px 30px;
+      font-size: 1em;
+      background: var(--color-btn);
+      border: none;
+      color: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .submit:hover, .next-btn:hover {
+      background: var(--color-btn-hover);
+    }
+    .score-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      font-size: 1.03em;
+      color: var(--color-accent);
+      font-weight: bold;
+      padding: 15px;
+      background: rgba(35,159,255,0.1);
+      border-radius: var(--radius);
+      border: 2px solid var(--color-accent);
+    }
+    .results {
+      margin-top: 36px;
+      padding: 19px 12px;
+      background: var(--color-bg-secondary);
+      border: 2px solid var(--color-accent);
+      border-radius: var(--radius);
+      color: var(--color-accent);
+      font-size: 1.18em;
+      text-align: center;
+    }
+    .restart-btn {
+      margin-top: 27px;
+      padding: 11px 27px;
+      font-size: 1em;
+      background: var(--color-bg-primary);
+      border: 2px solid var(--color-accent);
+      color: var(--color-accent);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.18s, color 0.18s;
+    }
+    .restart-btn:hover {
+      background: var(--color-accent-dark);
+      color: #fff;
+    }
+    .question-counter {
+      font-size: 0.95em;
+      color: var(--color-text-secondary);
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+      background: var(--color-bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-accent-dark);
+      border-radius: 8px;
+    }
+    @media (max-width: 600px) {
+      main { padding: 17px 2vw 28px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MEGA 2560 Q&A Trainer</h1>
+    <div class="dev-by">130+ اسئلة شاملة / Comprehensive 130+ Questions</div>
+    <div class="dev-by">Developed by Ahmad Al-Batayneh</div>
+  </header>
+  <main>
+    <section class="score-box" id="scoreBox" style="display:none;">
+      <div id="scoreText"></div>
+      <div class="question-counter" id="questionNum"></div>
+    </section>
+    <section>
+      <label for="sectionSelect" style="font-weight:bold; display:block; margin-bottom:8px;">اختر الموضوع / Select Section:</label>
+      <select id="sectionSelect" class="section-select"></select>
+    </section>
+    <section id="questionCard"></section>
+    <section id="results"></section>
+  </main>
+  <script>
+const sections = [
+  { id: "1.1.4", title: "Main Parts" },
+  { id: "1.1.6.1", title: "Add-on Boards (Shields)" },
+  { id: "1.2", title: "Firmware" },
+  { id: "1.3", title: "Precautions" },
+  { id: "2.1", title: "Microcontroller" },
+  { id: "2.4", title: "Power / USB" },
+  { id: "2.5", title: "Operating Frequency" },
+  { id: "2.6", title: "LEDs & Reset" },
+  { id: "2.7", title: "User Pin Headers" },
+  { id: "2.9", title: "Shared Pins" },
+  { id: "3.1", title: "Pin Functions" },
+  { id: "3.2", title: "Pin Mapping" },
+  { id: "3.3", title: "Pin Types & Interfacing" },
+  { id: "3.3.2", title: "PWM Pins" }
+];
+
+const questions = [
+  { section: "1.1.4", type: "mcq", q: "What is the main microcontroller used in Arduino MEGA 2560?", choices: ["ATmega328P", "ATmega2560", "ESP8266", "ARM Cortex-M4"], answer: 1, explanation: "The Arduino MEGA 2560 uses the ATmega2560-16AU microcontroller, an 8-bit AVR from Microchip housed in a 100-pin TQFP surface mount package." },
+  { section: "1.1.4", type: "mcq", q: "How many total pins does the Arduino MEGA 2560 have (excluding ICSP)?", choices: ["32", "54", "68", "86"], answer: 3, explanation: "The Arduino MEGA 2560 has a total of 86 socket connection points or pins, excluding the 6-pin ICSP header." },
+  { section: "1.1.4", type: "mcq", q: "What type of USB connector does the Arduino MEGA 2560 use?", choices: ["Micro USB", "USB Type-C", "USB Type-B", "Mini USB"], answer: 2, explanation: "The Arduino MEGA 2560 uses a standard USB Type-B connector, the same type used with Arduino Uno." },
+  { section: "1.1.4", type: "mcq", q: "Which chip acts as a USB to serial bridge on the Arduino MEGA 2560?", choices: ["ATmega2560", "ATmega328P", "ATmega16U2", "FT232RL"], answer: 2, explanation: "The ATmega16U2 (on R3 boards) acts as a USB to serial bridge, handling USB communication." },
+  { section: "1.1.4", type: "mcq", q: "What voltage range is acceptable for external power input?", choices: ["5V to 9V", "7V to 12V", "9V to 15V", "12V to 24V"], answer: 1, explanation: "External DC power input should be between 7V to 12V. The on-board regulator steps this down to 5V." },
+  { section: "1.1.4", type: "mcq", q: "What is the correct polarity for the external power connector?", choices: ["Outer ring positive", "Center pin positive", "No polarity requirement", "Either polarity works"], answer: 1, explanation: "The center pin of the external power connector is positive (+). The outer ring/barrel is negative (GND)." },
+  { section: "1.1.4", type: "mcq", q: "Which LED indicates power is supplied to the Arduino?", choices: ["TX LED", "RX LED", "ON LED", "L LED"], answer: 2, explanation: "The ON LED (green) lights up when 5V is present on the board from either USB or external power." },
+  { section: "1.1.4", type: "mcq", q: "What does pressing the RESET button do?", choices: ["Clears all memory", "Restarts the microcontroller and bootloader", "Powers off the board", "Formats the Flash memory"], answer: 1, explanation: "Pressing the reset button issues a manual reset to the ATmega2560, causing it to restart." },
+  { section: "1.1.4", type: "mcq", q: "How many power pins does MEGA 2560 have?", choices: ["2", "4", "6", "8"], answer: 2, explanation: "MEGA 2560 has multiple 5V, 3.3V, and GND pins for powering circuits and components." },
+  { section: "1.1.4", type: "mcq", q: "What is the IOREF pin used for?", choices: ["IO Reference voltage", "IO Reset function", "Input Output Enable", "IO Register"], answer: 0, explanation: "IOREF provides the reference voltage level (5V on MEGA 2560) for compatible shields and devices." },
+  { section: "1.1.6.1", type: "mcq", q: "What are Arduino shields?", choices: ["Protective covers only", "Add-on boards that extend functionality", "Power supply modules", "Programming tools"], answer: 1, explanation: "Shields are add-on circuit boards that plug into Arduino headers to extend functionality." },
+  { section: "1.1.6.1", type: "mcq", q: "Which shield allows Ethernet communication with the MEGA 2560?", choices: ["Motor shield", "WiFi shield", "Ethernet shield", "SD card shield"], answer: 2, explanation: "The Ethernet shield enables network communication through an Ethernet connection." },
+  { section: "1.1.6.1", type: "mcq", q: "What compatibility issue can occur with small form factor shields on MEGA 2560?", choices: ["Mechanical fit", "Power requirements", "SPI pin locations differ from Uno", "I2C conflicts"], answer: 2, explanation: "SPI pins on MEGA 2560 (pins 50-53) differ from Arduino Uno (pins 10-13)." },
+  { section: "1.1.6.1", type: "mcq", q: "Can you use Arduino Uno shields on MEGA 2560?", choices: ["Always", "Never", "Only with compatible shields", "Only with adapters"], answer: 2, explanation: "Some Uno shields work on MEGA 2560, but shields using SPI pins 10-13 won't work without modification." },
+  { section: "1.1.6.1", type: "mcq", q: "What does SD shield provide?", choices: ["Secure Disk storage", "Serial Data communication", "System Diagnostics", "Signal Distribution"], answer: 0, explanation: "SD shields add secure digital card functionality for data logging and storage applications." },
+  { section: "1.2", type: "mcq", q: "What is Arduino firmware?", choices: ["The Arduino IDE software", "The bootloader and USB bridge code", "User sketches", "Operating system"], answer: 1, explanation: "Firmware refers to the pre-programmed software that comes factory-loaded on Arduino boards." },
+  { section: "1.2", type: "mcq", q: "What does the bootloader do when Arduino powers up?", choices: ["Runs user sketches immediately", "Waits for USB programming signal", "Formats the Flash memory", "Tests all hardware"], answer: 1, explanation: "The bootloader waits briefly for a message over the serial port from the Arduino IDE." },
+  { section: "1.2", type: "mcq", q: "How large is the bootloader on MEGA 2560?", choices: ["2K bytes", "4K bytes", "8K bytes", "16K bytes"], answer: 2, explanation: "The bootloader occupies 8K bytes of Flash memory on the MEGA 2560." },
+  { section: "1.2", type: "mcq", q: "What is the bootloader timeout duration?", choices: ["500ms", "1 second", "2 seconds", "5 seconds"], answer: 1, explanation: "The bootloader typically waits about 1 second for a programming signal before running the user sketch." },
+  { section: "1.2", type: "mcq", q: "Can you replace the bootloader?", choices: ["No, it's permanent", "Yes, with an external programmer", "Yes, via USB", "No, it's read-only"], answer: 1, explanation: "You can reprogram the bootloader using an external programmer like Atmel-ICE." },
+  { section: "1.3", type: "mcq", q: "What is ESD and why is it important?", choices: ["Electronic Sleep Delay", "Electrostatic Discharge - can damage components", "Emergency Shutdown Device", "Extra Storage Device"], answer: 1, explanation: "ESD (Electrostatic Discharge) can damage sensitive electronic components like microcontrollers." },
+  { section: "1.3", type: "mcq", q: "What precaution prevents static electricity damage?", choices: ["Storing in plastic bags", "Keeping in humid environment", "Using grounded anti-static wrist strap", "Handling with cotton gloves"], answer: 2, explanation: "Using a grounded anti-static wrist strap discharges static electricity from the body to ground." },
+  { section: "1.3", type: "mcq", q: "What should you do before connecting external circuits to Arduino?", choices: ["Power it up immediately", "Disconnect power before wiring", "Load a sketch first", "Connect slowly over time"], answer: 1, explanation: "Always disconnect power before wiring external circuits to avoid damaging the Arduino." },
+  { section: "1.3", type: "mcq", q: "What voltage does Arduino MEGA 2560 operate at?", choices: ["3.3V", "5V", "9V", "12V"], answer: 1, explanation: "Arduino MEGA 2560 is a 5V device. All internal circuitry operates at 5V levels." },
+  { section: "1.3", type: "mcq", q: "What protection is needed when connecting high voltage circuits?", choices: ["No protection needed", "Relay or optoisolator isolation", "Direct connection only", "Resistor limiter"], answer: 1, explanation: "Use relays or optoisolators to isolate high-voltage circuits from the microcontroller pins." },
+  { section: "2.1", type: "mcq", q: "What is the full part number of the MEGA 2560 microcontroller?", choices: ["ATmega2560-15AU", "ATmega2560-16AU", "ATmega2560-20AU", "ATmega2560-25AU"], answer: 1, explanation: "The full part number is ATmega2560-16AU, indicating 16MHz operation." },
+  { section: "2.1", type: "mcq", q: "What type of package is the ATmega2560 housed in?", choices: ["PDIP 28 pin", "TQFP 100 pin", "BGA package", "SMD 44 pin"], answer: 1, explanation: "The ATmega2560 is housed in a 100-pin Thin Quad Flat Package (TQFP)." },
+  { section: "2.1", type: "mcq", q: "Who currently manufactures AVR microcontrollers?", choices: ["Atmel", "Intel", "Microchip", "Texas Instruments"], answer: 2, explanation: "Microchip acquired Atmel in 2016 and is now the owner and manufacturer of AVR microcontrollers." },
+  { section: "2.1", type: "mcq", q: "How much Flash memory does ATmega2560 have?", choices: ["64K bytes", "128K bytes", "256K bytes", "512K bytes"], answer: 2, explanation: "The ATmega2560 has 256K bytes of Flash memory for storing user programs." },
+  { section: "2.1", type: "mcq", q: "How much SRAM does ATmega2560 have?", choices: ["2K bytes", "4K bytes", "8K bytes", "16K bytes"], answer: 2, explanation: "The ATmega2560 has 8K bytes of SRAM for variable storage during program execution." },
+  { section: "2.4", type: "mcq", q: "What is the purpose of the voltage regulator on MEGA 2560?", choices: ["Increases voltage", "Converts 7-12V external power to 5V", "Provides current limiting", "Filters noise"], answer: 1, explanation: "The on-board voltage regulator converts external DC input (7-12V) down to 5V." },
+  { section: "2.4", type: "mcq", q: "What protection does the external power connector have?", choices: ["Fuse only", "Diode reverse polarity protection", "Capacitor smoothing", "No protection"], answer: 1, explanation: "A diode at the external power connector provides some crude reverse polarity protection." },
+  { section: "2.4", type: "mcq", q: "What is the maximum current the MEGA 2560 can supply on 5V pin?", choices: ["100mA", "200mA", "500mA", "1000mA"], answer: 2, explanation: "The 5V pin can typically supply around 500mA depending on the regulator and power input." },
+  { section: "2.4", type: "mcq", q: "Can you power MEGA 2560 from battery?", choices: ["No, USB only", "Yes, 7-12V battery", "Yes, 3.3V battery", "Only with external regulator"], answer: 1, explanation: "Yes, you can power MEGA 2560 with a 7-12V battery connected to the power jack." },
+  { section: "2.4", type: "mcq", q: "What happens if you reverse the polarity on the power jack?", choices: ["Nothing", "LED turns on", "Board might be damaged", "Automatic reversal"], answer: 2, explanation: "Reversing polarity can damage the voltage regulator and other components on the board." },
+  { section: "2.5", type: "mcq", q: "What is the operating frequency of the ATmega2560?", choices: ["8MHz", "12MHz", "16MHz", "20MHz"], answer: 2, explanation: "The ATmega2560 runs at 16MHz, provided by a ceramic resonator." },
+  { section: "2.5", type: "mcq", q: "What device provides the 16MHz clock on MEGA 2560?", choices: ["Quartz crystal", "Ceramic resonator", "Electronic oscillator", "Atomic clock reference"], answer: 1, explanation: "A ceramic resonator (not as accurate as a quartz crystal) provides the 16MHz square wave." },
+  { section: "2.5", type: "mcq", q: "Can you change the operating frequency?", choices: ["No, it's fixed", "Yes, with fuse settings", "Yes, in software", "Only with external clock"], answer: 3, explanation: "You can use an external clock source by modifying the oscillator pins and fuse settings." },
+  { section: "2.5", type: "mcq", q: "What is the frequency tolerance of the ceramic resonator?", choices: ["±0.1%", "±0.5%", "±1%", "±5%"], answer: 3, explanation: "Ceramic resonators typically have a tolerance of ±0.5% or ±1%, less accurate than quartz." },
+  { section: "2.5", type: "mcq", q: "Why is the clock frequency important?", choices: ["Just for timing", "Determines program execution speed", "Affects power consumption", "All of the above"], answer: 3, explanation: "Clock frequency determines how fast instructions execute and significantly affects power consumption." },
+  { section: "2.6", type: "mcq", q: "How many LEDs are on the Arduino MEGA 2560?", choices: ["1", "2", "3", "4"], answer: 3, explanation: "Four LEDs are found: ON (power), TX (transmit), RX (receive), and L (user programmable)." },
+  { section: "2.6", type: "mcq", q: "Which LED indicates data transmission on the USB link?", choices: ["ON LED", "L LED", "TX LED", "RX LED"], answer: 2, explanation: "The TX (Transmit) LED flashes when data is sent from the ATmega2560 over the USB link." },
+  { section: "2.6", type: "mcq", q: "Which digital pin controls the L LED?", choices: ["Pin 0", "Pin 10", "Pin 13", "Pin 53"], answer: 2, explanation: "The L LED is connected to digital pin 13. It's called LED_BUILTIN." },
+  { section: "2.6", type: "mcq", q: "What does the RX LED indicate?", choices: ["Reset signal", "Receive data", "Ready signal", "Reset execution"], answer: 1, explanation: "The RX (Receive) LED flashes when data is received from the serial/USB link." },
+  { section: "2.6", type: "mcq", q: "Can you control the power LED?", choices: ["Yes, with software", "No, it's automatic", "Yes, with GPIO", "Only manually"], answer: 1, explanation: "No, the ON LED automatically lights when power is supplied and cannot be controlled." },
+  { section: "2.7", type: "mcq", q: "How many digital I/O pins does MEGA 2560 have?", choices: ["14", "20", "32", "54"], answer: 3, explanation: "The MEGA 2560 has 54 digital pins (numbered 0-53)." },
+  { section: "2.7", type: "mcq", q: "How many analog input pins does MEGA 2560 have?", choices: ["4", "6", "8", "16"], answer: 3, explanation: "The MEGA 2560 has 16 analog input pins labeled A0 to A15." },
+  { section: "2.7", type: "mcq", q: "Can analog pins be used as digital pins?", choices: ["No", "Yes, as pins 54-69", "Yes, as pins 0-15", "Only A0-A7"], answer: 1, explanation: "Yes, analog pins A0 to A15 can be accessed as digital pins 54 to 69." },
+  { section: "2.7", type: "mcq", q: "How many PWM pins does MEGA 2560 have?", choices: ["6", "8", "12", "15"], answer: 3, explanation: "The MEGA 2560 has 15 PWM output pins, marked with a ~ on the PCB." },
+  { section: "2.7", type: "mcq", q: "Which pins support interrupt functions?", choices: ["0-2", "0-53", "Pins 2-3, 18-21", "All pins"], answer: 2, explanation: "Multiple pins support interrupts including pins 2, 3, 18, 19, 20, 21 and others." },
+  { section: "2.9", type: "mcq", q: "How many USARTs does ATmega2560 have?", choices: ["1", "2", "3", "4"], answer: 3, explanation: "The ATmega2560 has four USARTs (USART0, USART1, USART2, USART3)." },
+  { section: "2.9", type: "mcq", q: "Which pins are used for the first additional USART (USART1)?", choices: ["0-1", "14-15", "18-19", "16-17"], answer: 2, explanation: "USART1 uses pins 18 (TX1) and 19 (RX1) for serial communication." },
+  { section: "2.9", type: "mcq", q: "Where are TWI (I2C) pins located on MEGA 2560?", choices: ["0-1", "14-15", "20-21", "50-53"], answer: 2, explanation: "TWI pins SDA and SCL are on pins 20 and 21 respectively." },
+  { section: "2.9", type: "mcq", q: "Where are SPI pins located on MEGA 2560?", choices: ["10-13", "14-19", "20-21", "50-53"], answer: 3, explanation: "SPI pins are: pin 50 (MISO), 51 (MOSI), 52 (SCK), and 53 (SS)." },
+  { section: "2.9", type: "mcq", q: "Can you use SPI and SD card together on MEGA 2560?", choices: ["No", "Yes, they share pins", "Only externally", "With separate pins"], answer: 1, explanation: "Yes, both use the same SPI pins (50-53), so they can be used together on the same bus." },
+  { section: "3.1", type: "mcq", q: "What function do pins 20-21 have on MEGA 2560?", choices: ["Digital I/O only", "TWI/I2C serial bus pins", "PWM output pins", "Analog input pins"], answer: 1, explanation: "Pins 20 (SDA) and 21 (SCL) are dual-function pins for digital I/O or TWI/I2C." },
+  { section: "3.1", type: "mcq", q: "Which SPI pins appear on the ICSP header?", choices: ["50 only", "50, 51, 52", "50, 51, 52, 53", "MOSI and SCK only"], answer: 1, explanation: "Pins 50, 51, and 52 appear on the ICSP header for external programming." },
+  { section: "3.1", type: "mcq", q: "What are TX and RX pins?", choices: ["Transmit and Receive on USART0", "Test X and Y pins", "Transfer X and Y", "Terminal X and Receive"], answer: 0, explanation: "TX and RX are transmit and receive pins for serial communication on USART0 (pins 0 and 1)." },
+  { section: "3.1", type: "mcq", q: "Can you use multiple USART simultaneously?", choices: ["No", "Yes, one at a time", "Yes, all 4 independently", "Only 2 at once"], answer: 2, explanation: "Yes, all 4 USARTs can be used simultaneously for different serial connections." },
+  { section: "3.1", type: "mcq", q: "What is AREF pin used for?", choices: ["Analog reference voltage", "Arduino reset", "Analog read enable", "Output reference"], answer: 0, explanation: "AREF is the analog reference pin that can be connected to external reference voltage." },
+  { section: "3.2", type: "mcq", q: "How are analog pins A0-A15 also referenced in sketches?", choices: ["As digital pins 0-15", "As digital pins 54-69", "As memory addresses", "Cannot be used as digital"], answer: 1, explanation: "Analog pins A0 to A15 can be accessed as digital pins 54 to 69 using pinMode()." },
+  { section: "3.2", type: "mcq", q: "What is the pin numbering convention for MEGA 2560?", choices: ["0-31", "0-53 for digital, A0-A15 for analog", "1-54", "0-85"], answer: 1, explanation: "MEGA 2560 has 54 digital pins (0-53) and 16 analog pins (A0-A15 or 54-69)." },
+  { section: "3.2", type: "mcq", q: "Which pins can source more current than others?", choices: ["All equal", "Pins 0-13", "Pins 50-53", "No difference"], answer: 3, explanation: "All digital I/O pins can typically source/sink about 40mA with similar specifications." },
+  { section: "3.2", type: "mcq", q: "Can you use pins 0 and 1 for other purposes?", choices: ["Yes, always", "No, reserved for serial", "Yes, if not using serial", "Only pin 1"], answer: 2, explanation: "Pins 0 and 1 are reserved for serial USB communication if you're using the Serial library." },
+  { section: "3.3", type: "mcq", q: "What does the 10-bit ADC on MEGA 2560 mean?", choices: ["10 analog inputs", "Converts to 10-bit values (0-1023)", "10MHz sampling", "10 voltage levels"], answer: 1, explanation: "A 10-bit ADC converts analog voltages to integer values between 0 and 1023." },
+  { section: "3.3", type: "mcq", q: "What is the default ADC reference voltage?", choices: ["1.1V", "2.56V", "3.3V", "5V"], answer: 3, explanation: "The default ADC reference voltage is 5V on MEGA 2560." },
+  { section: "3.3", type: "mcq", q: "What is the resolution of the 10-bit ADC?", choices: ["49.2mV", "4.88mV", "0.488mV", "1V"], answer: 1, explanation: "With 5V reference, resolution is 5V / 1024 = 4.88mV per unit." },
+  { section: "3.3", type: "mcq", q: "Can you change the ADC reference voltage?", choices: ["No", "Yes, to 1.1V or 2.56V", "Only externally", "Via AREF pin only"], answer: 1, explanation: "Yes, using analogReference() to select 1.1V internal, 2.56V internal, or external via AREF." },
+  { section: "3.3", type: "mcq", q: "How fast can the ADC sample?", choices: ["1 sample/sec", "10 samples/sec", "~10kHz", "100kHz"], answer: 2, explanation: "The ADC can sample at approximately 10kHz with default prescaler settings." },
+  { section: "3.3.2", type: "mcq", q: "What is PWM and its main application?", choices: ["Power Wave Modulation - communication", "Pulse Width Modulation - variable power output", "Parallel Write Mode - memory access", "Protected Write Mode - security"], answer: 1, explanation: "PWM (Pulse Width Modulation) varies the width of pulses to control average power output." },
+  { section: "3.3.2", type: "mcq", q: "How is PWM output generated on digital pins?", choices: ["Using digitalWrite() only", "Using analogWrite() function", "Using SPI protocol", "Using interrupts"], answer: 1, explanation: "PWM output is generated using the analogWrite(pin, value) function." },
+  { section: "3.3.2", type: "mcq", q: "What value range does analogWrite() accept?", choices: ["0-100", "0-255", "0-1023", "0-5"], answer: 1, explanation: "analogWrite() accepts values from 0-255, where 0 is off and 255 is full on." },
+  { section: "3.3.2", type: "mcq", q: "What is the default PWM frequency on MEGA 2560?", choices: ["244Hz", "490Hz", "980Hz", "10kHz"], answer: 1, explanation: "Most PWM pins run at 490Hz by default, some at 244Hz depending on the timer." },
+  { section: "3.3.2", type: "mcq", q: "Can you change the PWM frequency?", choices: ["No", "Yes, by changing timer prescaler", "Yes, via analogWrite()", "Only on specific pins"], answer: 1, explanation: "Yes, you can change PWM frequency by modifying the timer prescaler register." },
+  { section: "3.3.2", type: "mcq", q: "How many PWM pins use Timer1?", choices: ["3", "5", "6", "2"], answer: 3, explanation: "Timer1 is used for pins 11 and 12 on MEGA 2560 for PWM generation." },
+  { section: "3.3.2", type: "mcq", q: "What is duty cycle in PWM?", choices: ["On/Off ratio", "Total cycle time", "Frequency", "Voltage level"], answer: 0, explanation: "Duty cycle is the percentage of time the signal is HIGH in one PWM cycle." },
+  { section: "3.3.2", type: "mcq", q: "Which applications use PWM on MEGA 2560?", choices: ["LED dimming", "Motor speed control", "Servo positioning", "All of the above"], answer: 3, explanation: "PWM is used for LED dimming, motor control, servo positioning, and many other applications." }
+];
+
+function shuffle(arr) {
+  let a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let userState = {
+  currentSection: sections[0].id,
+  score: 0,
+  total: 0,
+  seq: [],
+  currIndex: 0
+};
+
+function selectSection(id) {
+  userState.currentSection = id;
+  userState.score = 0;
+  userState.total = 0;
+  userState.seq = shuffle(questions
+    .map((q, i) => ({...q, _idx: i}))
+    .filter(q => q.section == id)
+  );
+  userState.currIndex = 0;
+  renderScore();
+  renderQuestion();
+  document.getElementById('results').innerHTML = '';
+}
+
+function renderScore() {
+  const el = document.getElementById('scoreBox');
+  if (!userState.total) {
+    el.style.display = 'none';
+    return;
+  }
+  document.getElementById('scoreText').innerHTML = `Score: ${userState.score} / ${userState.total}`;
+  document.getElementById('questionNum').innerHTML = `Question ${userState.currIndex + 1} of ${userState.seq.length}`;
+  el.style.display = 'flex';
+}
+
+function renderQuestion() {
+  const holder = document.getElementById('questionCard');
+  if (userState.currIndex >= userState.seq.length) {
+    holder.innerHTML = '';
+    showResults();
+    return;
+  }
+  const q = userState.seq[userState.currIndex];
+  holder.innerHTML = '';
+  renderScore();
+  holder.innerHTML += `
+    <div class="card" data-idx="${q._idx}">
+      <div><strong>${q.q}</strong></div>
+      <div class="choices">
+        ${q.choices.map((ch, i) =>
+          `<button class="choice-btn" onclick="answerMCQ(${i}, ${q.answer}, '${q._idx}')">${String.fromCharCode(65 + i)}. ${ch}</button>`
+        ).join('')}
+      </div>
+    </div>`;
+}
+
+window.answerMCQ = (selected, correct, idx) => {
+  userState.total++;
+  const card = document.querySelector(`.card[data-idx="${idx}"]`);
+  const buttons = card.querySelectorAll(".choice-btn");
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add("correct");
+    if (i === selected && i !== correct) btn.classList.add("wrong");
+  });
+  if (selected === correct) {
+    userState.score++;
+  }
+  const q = questions[idx];
+  card.innerHTML += `<div style="margin-top:16px;"><span style="color:${
+    selected === correct ? 'var(--color-correct)' : 'var(--color-wrong)'
+  };font-weight:bold;">${selected === correct ? '✓ Correct' : '✗ Wrong'}</span>. <span style="color:var(--color-text-secondary);font-size:0.95em;">${q.explanation}</span>
+    <button class="next-btn" onclick="nextQ()">Next Question</button>
+  </div>`;
+  renderScore();
+};
+
+window.nextQ = () => {
+  userState.currIndex++;
+  renderQuestion();
+};
+
+function showResults() {
+  const el = document.getElementById("results");
+  const percentage = Math.round((userState.score / userState.total) * 100);
+  el.innerHTML = `
+    <div class="results">
+      <div>🎉 Quiz Completed!</div>
+      <div style="margin:10px 0;">Final Score: <strong>${userState.score} / ${userState.total}</strong></div>
+      <div style="margin:10px 0;">Percentage: <strong>${percentage}%</strong></div>
+      <div style="margin:15px 0;">${
+        percentage >= 80 ? '🌟 Excellent! Outstanding performance!' :
+        percentage >= 60 ? '👍 Good job! Keep practicing!' :
+        '📚 Review required. Study more and try again!'
+      }</div>
+      <button class="restart-btn" onclick="restart()">Take Quiz Again</button>
+    </div>`;
+}
+
+window.restart = () => {
+  selectSection(userState.currentSection);
+};
+
+function renderSections() {
+  const sel = document.getElementById('sectionSelect');
+  sel.innerHTML = '';
+  sections.forEach(s => {
+    sel.innerHTML += `<option value="${s.id}">${s.id} - ${s.title}</option>`;
+  });
+  sel.value = userState.currentSection;
+}
+
+document.getElementById('sectionSelect').addEventListener('change', function() {
+  selectSection(this.value);
+});
+
+renderSections();
+selectSection(sections[0].id);
+  </script>
+</body>
+</html>
