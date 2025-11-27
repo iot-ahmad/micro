@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino MEGA 2560 - 200 Multiple Choice Questions</title>
+    <style>
+        :root {
+            --primary: #2185d0;
+            --success: #21ba45;
+            --warning: #f2711c;
+            --error: #db2828;
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a73e8 0%, var(--primary) 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .controls {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        input, select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(33, 133, 208, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 1em;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .question-container {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .question-category {
+            background: rgba(33, 133, 208, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9f9f9;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(33, 133, 208, 0.05);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1em;
+        }
+
+        .option-badge {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(33, 133, 208, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: rgba(33, 186, 69, 0.15);
+            border-width: 3px;
+        }
+
+        .option.correct .option-badge {
+            background: var(--success);
+        }
+
+        .option.incorrect {
+            border-color: var(--error);
+            background: rgba(219, 40, 40, 0.15);
+            border-width: 3px;
+        }
+
+        .option.incorrect .option-badge {
+            background: var(--error);
+        }
+
+        .feedback-message {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .feedback-message.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background: rgba(33, 186, 69, 0.15);
+            border-left: 4px solid var(--success);
+            color: #155724;
+        }
+
+        .feedback-incorrect {
+            background: rgba(219, 40, 40, 0.15);
+            border-left: 4px solid var(--error);
+            color: #721c24;
+        }
+
+        .answer-display {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+        }
+
+        .answer-display.show {
+            display: block;
+        }
+
+        .answer-display h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .answer-display p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin: 5px 0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .progress-info {
+            text-align: center;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .section-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .section-btn {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+
+        .section-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .results-container {
+            display: none;
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .results-score {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .results-message {
+            font-size: 1.2em;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result-stat {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .result-stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .result-stat-label {
+            color: var(--text-light);
+            margin-top: 5px;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            .control-row {
+                grid-template-columns: 1fr;
+            }
+
+            .question-container {
+                padding: 20px;
+            }
+
+            .results-score {
+                font-size: 2em;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📚 Arduino MEGA 2560 Exam</h1>
+        <p>200 Multiple Choice Questions for University-Level Study</p>
+        <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Guest Only • Developed by Ahmad Al-Batayneh</p>
+    </header>
+
+    <div class="container">
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalQuestions">200</div>
+                <div class="stat-label">Total Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="answered">0</div>
+                <div class="stat-label">Answered</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="score">0%</div>
+                <div class="stat-label">Current Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="timeSpent">0:00</div>
+                <div class="stat-label">Time Spent</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Select Section:</label>
+                    <select id="sectionSelect" onchange="goToSection(this.value)">
+                        <option value="0">All Sections</option>
+                        <option value="1">1.1.4 - Main Parts</option>
+                        <option value="2">1.1.6.1 - Shields</option>
+                        <option value="3">1.2 - Firmware</option>
+                        <option value="4">1.3 - Precautions</option>
+                        <option value="5">2.1 - Microcontroller</option>
+                        <option value="6">2.4 - Power & USB</option>
+                        <option value="7">2.5 - Operating Frequency</option>
+                        <option value="8">2.6 - LEDs & Reset</option>
+                        <option value="9">2.7 - Pin Headers</option>
+                        <option value="10">2.9 - Shared Pins</option>
+                        <option value="11">3.1 - Pin Functions</option>
+                        <option value="12">3.2 - Pin Mapping</option>
+                        <option value="13">3.3 - Pin Types</option>
+                        <option value="14">3.3.2 - PWM Pins</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Jump to Question:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="jumpQuestion" min="1" max="200" placeholder="Question #" style="flex: 1;">
+                        <button class="btn-primary" onclick="jumpToQuestion()" style="padding: 10px 20px;">Go</button>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="showAnswers()">Show All Answers</button>
+                <button class="btn-secondary" onclick="resetQuiz()">Reset Quiz</button>
+                <button class="btn-secondary" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
+        </div>
+
+        <!-- Question Display -->
+        <div id="questionDisplay"></div>
+
+        <!-- Results -->
+        <div id="resultsContainer" class="results-container">
+            <div class="results-header">
+                <div class="results-score" id="finalScore">0%</div>
+                <div class="results-message" id="resultMessage"></div>
+                <div class="results-stats">
+                    <div class="result-stat">
+                        <div class="result-stat-number" id="correctCount">0</div>
+                        <div class="result-stat-label">Correct</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-number" id="incorrectCount">0</div>
+                        <div class="result-stat-label">Incorrect</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-number" id="skippedCount">0</div>
+                        <div class="result-stat-label">Skipped</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="retakeQuiz()" style="margin-top: 20px;">Retake Quiz</button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div id="navContainer" class="navigation">
+            <button id="prevBtn" class="btn-primary nav-button" onclick="previousQuestion()" disabled>← Previous</button>
+            <div class="progress-info">
+                Question <span id="currentNum">1</span> of <span id="totalNum">200</span>
+            </div>
+            <button id="nextBtn" class="btn-primary nav-button" onclick="nextQuestion()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            // 1.1.4 Main Parts (14 questions)
+            {section: 1, num: 1, question: 'What microcontroller is the Arduino MEGA 2560 based on?', options: ['ATmega328P', 'ATmega2560', 'ATmega1280', 'ARM Cortex-M0'], correct: 1, explanation: 'The Arduino MEGA 2560 uses the ATmega2560 8-bit RISC microcontroller, providing more pins and memory than smaller models.'},
+            {section: 1, num: 2, question: 'How many digital I/O pins does the Arduino MEGA 2560 have?', options: ['14', '20', '54', '86'], correct: 2, explanation: 'Arduino MEGA 2560 has 54 digital I/O pins, significantly more than the Uno (14 pins).'},
+            {section: 1, num: 3, question: 'How many of the digital pins support PWM output?', options: ['6', '12', '15', '20'], correct: 2, explanation: '15 pins support PWM: pins 2-13 (12 pins) and pins 44-46 (3 pins).'},
+            {section: 1, num: 4, question: 'How many analog input channels are available?', options: ['6', '12', '14', '16'], correct: 3, explanation: 'Arduino MEGA 2560 has 16 analog input pins (A0-A15).'},
+            {section: 1, num: 5, question: 'What is the resolution of the analog-to-digital converter?', options: ['8-bit', '10-bit', '12-bit', '16-bit'], correct: 1, explanation: 'The ADC is 10-bit, providing 1024 levels (0-1023) for analog measurements.'},
+            {section: 1, num: 6, question: 'What is the main advantage of MEGA 2560 over Arduino Uno?', options: ['Faster processor', 'More I/O pins and memory', 'Smaller size', 'Built-in WiFi'], correct: 1, explanation: 'MEGA 2560 provides 54 digital pins vs Uno\'s 14, and 256KB flash vs Uno\'s 32KB.'},
+            {section: 1, num: 7, question: 'Which component converts external voltage to 5V?', options: ['Oscillator', 'Voltage Regulator', 'USB Port', 'Bootloader'], correct: 1, explanation: 'The linear voltage regulator (AMS1117) converts 7-12V input to stable 5V output.'},
+            {section: 1, num: 8, question: 'What is the clock frequency of Arduino MEGA 2560?', options: ['8 MHz', '12 MHz', '16 MHz', '20 MHz'], correct: 2, explanation: '16 MHz is provided by the external crystal oscillator.'},
+            {section: 1, num: 9, question: 'How much flash memory is available for user sketches?', options: ['32 KB', '128 KB', '248 KB', '256 KB'], correct: 2, explanation: 'Total flash is 256KB, but 8KB is reserved for bootloader, leaving 248KB for sketches.'},
+            {section: 1, num: 10, question: 'How much SRAM is available for program execution?', options: ['2 KB', '4 KB', '8 KB', '16 KB'], correct: 2, explanation: 'SRAM (working memory) is 8 KB for global variables and stack.'},
+            {section: 1, num: 11, question: 'What is the purpose of the ICSP header?', options: ['Serial communication', 'In-Circuit Serial Programming', 'Interrupt control', 'Power supply'], correct: 1, explanation: 'ICSP allows bootloader updates and direct microcontroller programming.'},
+            {section: 1, num: 12, question: 'What voltage level represents HIGH on digital pins?', options: ['0V', '2.5V', '3.3V', '5V'], correct: 3, explanation: 'Digital pins operate at 5V (HIGH) or 0V (LOW).'},
+            {section: 1, num: 13, question: 'What does the 16 MHz crystal oscillator do?', options: ['Provides power', 'Generates system clock', 'Stabilizes voltage', 'Resets the board'], correct: 1, explanation: 'The crystal oscillator provides precise timing for the CPU.'},
+            {section: 1, num: 14, question: 'How many UART serial ports are available?', options: ['1', '2', '3', '4'], correct: 3, explanation: 'ATmega2560 has 4 hardware UART ports (Serial0, Serial1, Serial2, Serial3).'},
+
+            // 1.1.6.1 Shields (12 questions)
+            {section: 2, num: 15, question: 'What are Arduino Shields?', options: ['Programming tools', 'Add-on boards that extend functionality', 'Protective covers', 'Power supplies'], correct: 1, explanation: 'Shields stack on top of Arduino boards to add features like WiFi, motors, sensors, etc.'},
+            {section: 2, num: 16, question: 'How do shields connect to Arduino MEGA 2560?', options: ['Via USB', 'Via I2C', 'Via pin headers', 'Via SPI'], correct: 2, explanation: 'Shields stack directly on the pin headers (male headers on board, female on shield).'},
+            {section: 2, num: 17, question: 'Which shield is used for wireless connectivity?', options: ['Motor Shield', 'WiFi Shield', 'Sensor Shield', 'Servo Shield'], correct: 1, explanation: 'WiFi shields provide network connectivity via 802.11b/g/n.'},
+            {section: 2, num: 18, question: 'What is a critical consideration when selecting a shield?', options: ['Color', 'Weight', 'Pin conflicts', 'Manufacturer'], correct: 2, explanation: 'Must verify the shield doesn\'t use pins needed for your project.'},
+            {section: 2, num: 19, question: 'Can multiple shields be stacked together?', options: ['Always', 'Never', 'Sometimes, depending on pin usage', 'Only if they\'re same manufacturer'], correct: 2, explanation: 'Stacking depends on whether shields share pins without conflict.'},
+            {section: 2, num: 20, question: 'What voltage must shields operate at?', options: ['3.3V only', '5V only', '9V only', 'Any voltage'], correct: 1, explanation: 'MEGA 2560 shields must be 5V compatible.'},
+            {section: 2, num: 21, question: 'What is a Motor Shield used for?', options: ['PWM generation', 'Motor control and H-bridge', 'Current limiting', 'Voltage regulation'], correct: 1, explanation: 'Motor shields provide H-bridge circuits to control DC motors.'},
+            {section: 2, num: 22, question: 'How does a Sensor Shield help?', options: ['Adds sensors', 'Simplifies multiple sensor connections', 'Amplifies signals', 'Converts analog to digital'], correct: 1, explanation: 'Sensor shields provide convenient headers for multiple sensor inputs.'},
+            {section: 2, num: 23, question: 'What communication protocol might a shield use?', options: ['Only SPI', 'Only I2C', 'SPI, I2C, or Serial', 'Only Serial'], correct: 2, explanation: 'Different shields use different protocols depending on design.'},
+            {section: 2, num: 24, question: 'What is a Proto Shield?', options: ['Protects from static', 'Breadboard area for prototyping', 'Program storage', 'Power protection'], correct: 1, explanation: 'Proto shields have breadboard area for custom circuit development.'},
+            {section: 2, num: 25, question: 'How important is library support when choosing a shield?', options: ['Not important', 'Somewhat important', 'Critical for easy use', 'Only for complex projects'], correct: 2, explanation: 'Without Arduino IDE libraries, programming the shield becomes difficult.'},
+            {section: 2, num: 26, question: 'What is the standard pin header pitch?', options: ['1.27mm', '2mm', '2.54mm', '5mm'], correct: 2, explanation: '2.54mm (0.1 inch) is the standard Arduino header pitch.'},
+
+            // 1.2 Firmware (10 questions)
+            {section: 3, num: 27, question: 'What is the Arduino bootloader?', options: ['Operating system', 'Small program that enables USB programming', 'Compiler', 'Security system'], correct: 1, explanation: 'Bootloader is firmware that allows uploading sketches via USB without external programmer.'},
+            {section: 3, num: 28, question: 'Where does the bootloader reside?', options: ['In SRAM', 'In EEPROM', 'In the first 8KB of flash', 'In the crystal oscillator'], correct: 2, explanation: 'Bootloader occupies first 8KB of flash memory and is protected.'},
+            {section: 3, num: 29, question: 'What happens during the boot sequence on power-up?', options: ['Directly runs user sketch', 'Bootloader runs, waits for upload, then sketch starts', 'System initialization only', 'Enters sleep mode'], correct: 1, explanation: 'Bootloader executes first, waits ~1 second for new code, then user sketch runs.'},
+            {section: 3, num: 30, question: 'Can the bootloader be updated?', options: ['Never', 'Yes, with special programmer', 'Only by manufacturer', 'Automatically'], correct: 1, explanation: 'Bootloader can be updated using ISP (In-System Programmer).'},
+            {section: 3, num: 31, question: 'What does the bootloader check when receiving data?', options: ['File size', 'Error checking', 'Manufacturer', 'Destination'], correct: 1, explanation: 'Bootloader performs checksum and error verification on uploaded code.'},
+            {section: 3, num: 32, question: 'How long does the bootloader wait for new uploads?', options: ['0.5 seconds', '1 second', '2 seconds', '5 seconds'], correct: 1, explanation: 'Bootloader waits approximately 1 second for new sketch upload after reset.'},
+            {section: 3, num: 33, question: 'What does reset do to memory?', options: ['Clears everything', 'Clears only SRAM', 'Clears only flash', 'Clears EEPROM'], correct: 1, explanation: 'Reset clears SRAM but preserves flash (sketch) and EEPROM data.'},
+            {section: 3, num: 34, question: 'Which IDE component communicates with the bootloader?', options: ['Compiler', 'Serial uploader in IDE', 'Debugger', 'Profiler'], correct: 1, explanation: 'Arduino IDE uses serial protocol to communicate with bootloader.'},
+            {section: 3, num: 35, question: 'What is the function of the auto-reset circuit?', options: ['Prevents overheating', 'Automatically resets before sketch upload', 'Resets on error', 'Powers down unused pins'], correct: 1, explanation: 'Auto-reset circuit resets MEGA 2560 when IDE initiates upload.'},
+            {section: 3, num: 36, question: 'How many times can you reprogram the MEGA 2560?', options: ['100 times', '1,000 times', '10,000 times', 'Unlimited'], correct: 2, explanation: 'Flash memory rated for ~10,000 erase/write cycles, but this is rarely reached in practice.'},
+
+            // 1.3 Precautions (12 questions)
+            {section: 4, num: 37, question: 'What is the maximum voltage safe for digital pins?', options: ['3.3V', '5V', '5.5V', '12V'], correct: 2, explanation: 'Digital pins are rated for 5V max; exceeding 5.5V causes damage.'},
+            {section: 4, num: 38, question: 'What is the maximum safe current per pin?', options: ['20mA', '30mA', '40mA', '50mA'], correct: 2, explanation: 'Each pin can source/sink maximum 40mA, but 20-30mA is recommended for reliability.'},
+            {section: 4, num: 39, question: 'What is the correct polarity for the power jack?', options: ['Center negative', 'Center positive', 'Either works', 'AC power'], correct: 1, explanation: 'Power jack is center positive (inner pin +, outer sleeve -).'},
+            {section: 4, num: 40, question: 'What danger does static electricity pose?', options: ['Overheating', 'ESD damage to components', 'Battery drain', 'Code corruption'], correct: 1, explanation: 'Static Discharge (ESD) can permanently damage microcontroller pins.'},
+            {section: 4, num: 41, question: 'What is the recommended input voltage range?', options: ['5-7V', '7-12V', '9-15V', '12-20V'], correct: 1, explanation: 'Recommended range is 7-12V; absolute limit is 6-20V.'},
+            {section: 4, num: 42, question: 'What happens if you short 5V to GND?', options: ['Nothing', 'Voltage regulator may be damaged', 'LEDs blink', 'Board resets'], correct: 1, explanation: 'Short circuit can destroy the voltage regulator and damage the board.'},
+            {section: 4, num: 43, question: 'How should you handle the board safely?', options: ['Grasp the IC', 'Ground yourself and hold by edges', 'Use bare hands', 'Avoid grounding'], correct: 1, explanation: 'Ground yourself to prevent ESD, and handle by PCB edges to avoid components.'},
+            {section: 4, num: 44, question: 'What is the USB current limit?', options: ['100mA', '250mA', '500mA', '1000mA'], correct: 2, explanation: 'USB 2.0 provides up to 500mA, shared between board and peripherals.'},
+            {section: 4, num: 45, question: 'What precaution applies to USB cables?', options: ['Use any cable', 'Insert/remove gently', 'Allow force', 'No precautions'], correct: 1, explanation: 'USB connectors are delicate; use gentle, straight insertions.'},
+            {section: 4, num: 46, question: 'What is the total current limit for all I/O pins combined?', options: ['100mA', '150mA', '200mA', '500mA'], correct: 2, explanation: 'Total I/O current limit is 200mA across all 54 pins.'},
+            {section: 4, num: 47, question: 'What should you do if the board gets hot?', options: ['Continue using', 'Stop immediately and let cool', 'Apply water', 'Reverse power'], correct: 1, explanation: 'Excessive heat indicates problem; stop use and investigate before continuing.'},
+            {section: 4, num: 48, question: 'Can you apply more than 5V to analog inputs?', options: ['Yes, any voltage', 'Only up to 5V', 'Up to 3.3V only', 'No limit'], correct: 1, explanation: 'Analog inputs are rated for 0-5V; exceeding this causes damage.'},
+
+            // 2.1 Microcontroller (14 questions)
+            {section: 5, num: 49, question: 'What type of microcontroller is the ATmega2560?', options: ['32-bit', '8-bit RISC', 'ARM Cortex', '4-bit'], correct: 1, explanation: 'ATmega2560 is an 8-bit RISC (Reduced Instruction Set Computer) architecture.'},
+            {section: 5, num: 50, question: 'How much flash memory does ATmega2560 have?', options: ['64 KB', '128 KB', '256 KB', '512 KB'], correct: 2, explanation: 'ATmega2560 has 256 KB of flash memory for program storage.'},
+            {section: 5, num: 51, question: 'How much SRAM does ATmega2560 have?', options: ['2 KB', '4 KB', '8 KB', '16 KB'], correct: 2, explanation: 'SRAM (static RAM) is 8 KB for variables and stack.'},
+            {section: 5, num: 52, question: 'How much EEPROM does ATmega2560 have?', options: ['1 KB', '2 KB', '4 KB', '8 KB'], correct: 2, explanation: 'EEPROM (non-volatile storage) is 4 KB for persistent data.'},
+            {section: 5, num: 53, question: 'How many timers/counters does ATmega2560 have?', options: ['2', '4', '6', '8'], correct: 2, explanation: '6 timers total: Timer0 (8-bit), Timer1/3/4/5 (16-bit), Timer2 (8-bit).'},
+            {section: 5, num: 54, question: 'What is the package type of ATmega2560?', options: ['DIP-8', 'DIP-28', 'DIP-40', 'BGA'], correct: 2, explanation: 'ATmega2560 comes in 100-pin TQFP or 100-pin MLF packages (not simple DIP).'},
+            {section: 5, num: 55, question: 'How many GPIO pins does ATmega2560 have?', options: ['32', '54', '86', '100'], correct: 2, explanation: 'ATmega2560 has 86 total pins, with 54 usable on Arduino MEGA 2560.'},
+            {section: 5, num: 56, question: 'What is the maximum clock speed?', options: ['8 MHz', '12 MHz', '16 MHz', '20 MHz'], correct: 2, explanation: 'ATmega2560 is rated for maximum 16 MHz operation.'},
+            {section: 5, num: 57, question: 'How many analog input channels?', options: ['8', '12', '16', '32'], correct: 2, explanation: 'ATmega2560 has 16-channel 10-bit ADC.'},
+            {section: 5, num: 58, question: 'How many UARTs (serial ports)?', options: ['1', '2', '3', '4'], correct: 3, explanation: 'ATmega2560 has 4 UART ports for serial communication.'},
+            {section: 5, num: 59, question: 'Does ATmega2560 have SPI?', options: ['No', 'Yes, single module', 'Yes, multiple modules', 'Only as I2C'], correct: 1, explanation: 'Yes, one SPI module for serial communication.'},
+            {section: 5, num: 60, question: 'Does ATmega2560 have I2C?', options: ['No', 'Yes, single module (TWI)', 'Yes, multiple modules', 'Only via SPI'], correct: 1, explanation: 'Yes, one I2C/TWI module for two-wire communication.'},
+            {section: 5, num: 61, question: 'What architecture type is RISC?', options: ['Complex instruction set', 'Reduced instruction set', 'Random instruction set', 'Real instruction set'], correct: 1, explanation: 'RISC uses simpler instructions executed faster, unlike CISC.'},
+            {section: 5, num: 62, question: 'What is the word size of ATmega2560?', options: ['4 bits', '8 bits', '16 bits', '32 bits'], correct: 1, explanation: '8-bit word size means instructions operate on 8-bit data.'},
+
+            // 2.4 Power & USB (13 questions)
+            {section: 6, num: 63, question: 'What is the regulated voltage output?', options: ['3.3V only', '5V only', 'Both 3.3V and 5V', '9V'], correct: 2, explanation: 'Board provides both 5V (main) and 3.3V (from regulator).'},
+            {section: 6, num: 64, question: 'What is the USB power specification?', options: ['100mA', '250mA', '500mA', '1A'], correct: 2, explanation: 'USB provides up to 500mA at 5V.'},
+            {section: 6, num: 65, question: 'What component regulates voltage?', options: ['Oscillator', 'Linear regulator (AMS1117)', 'Capacitor', 'Diode'], correct: 1, explanation: 'AMS1117 is a 1A linear regulator converting input to 5V.'},
+            {section: 6, num: 66, question: 'How much current can the 5V pin supply?', options: ['100mA', '200mA', '400-500mA', '1A'], correct: 2, explanation: '5V pin can supply ~400-500mA to external devices.'},
+            {section: 6, num: 67, question: 'How much current can the 3.3V pin supply?', options: ['50-100mA', '200mA', '500mA', '1A'], correct: 0, explanation: '3.3V pin supplies only 50-100mA, limited by internal regulator.'},
+            {section: 6, num: 68, question: 'What does the VIN pin provide?', options: ['Regulated 5V', 'Raw input voltage', '3.3V', 'Ground reference'], correct: 1, explanation: 'VIN pin provides access to raw input voltage before regulation.'},
+            {section: 6, num: 69, question: 'How many ground pins are available?', options: ['1', '2', '3', '4'], correct: 3, explanation: 'MEGA 2560 has 4 GND pins distributed around the board.'},
+            {section: 6, num: 70, question: 'What is AREF pin used for?', options: ['Analog reference voltage', 'Reset signal', 'Power', 'Ground'], correct: 0, explanation: 'AREF pin sets the analog reference voltage (default 5V).'},
+            {section: 6, num: 71, question: 'Can you apply 12V directly to the 5V pin?', options: ['Yes', 'No, will damage', 'Only briefly', 'Only in test mode'], correct: 1, explanation: '5V pin is output only; applying external voltage damages regulator.'},
+            {section: 6, num: 72, question: 'What automatic feature switches power sources?', options: ['Manual switch', 'Auto-select circuit', 'Diodes', 'Capacitors'], correct: 1, explanation: 'Auto-select circuit automatically chooses USB or external power.'},
+            {section: 6, num: 73, question: 'What is the typical board power consumption?', options: ['10-20mA', '50-100mA', '50-200mA', '500mA+'], correct: 2, explanation: 'Board typically draws 50-200mA depending on loaded components.'},
+            {section: 6, num: 74, question: 'How many 5V supply pins are there?', options: ['1', '2', '3', '4'], correct: 1, explanation: 'Single 5V output pin, but can be used with multiple devices.'},
+            {section: 6, num: 75, question: 'What happens if you exceed current limits?', options: ['Nothing', 'Regulator shuts down (thermal protection)', 'LEDs brighten', 'Speed increases'], correct: 1, explanation: 'Regulator has thermal shutdown protection if overcurrent occurs.'},
+
+            // 2.5 Operating Frequency (10 questions)
+            {section: 7, num: 76, question: 'What is the operating frequency?', options: ['8 MHz', '12 MHz', '16 MHz', '20 MHz'], correct: 2, explanation: '16 MHz is the standard Arduino operating frequency.'},
+            {section: 7, num: 77, question: 'What provides the 16 MHz clock?', options: ['Internal oscillator', 'External crystal', 'USB clock', 'Power supply'], correct: 1, explanation: 'External 16 MHz crystal oscillator provides precise timing.'},
+            {section: 7, num: 78, question: 'What are the crystal connections?', options: ['XTAL0', 'XTAL1 and XTAL2', 'CLK1 and CLK2', 'OSC+ and OSC-'], correct: 1, explanation: 'Crystal connects to XTAL1 and XTAL2 pins.'},
+            {section: 7, num: 79, question: 'What is a clock cycle time at 16 MHz?', options: ['62.5 ns', '125 ns', '500 ns', '1 us'], correct: 0, explanation: '1 clock cycle = 1 / (16×10^6) = 62.5 nanoseconds.'},
+            {section: 7, num: 80, question: 'How many instructions per millisecond at 16 MHz?', options: ['16', '160', '1,600', '16,000'], correct: 3, explanation: '16 MHz × 1ms = 16,000 clock cycles = ~16,000 single-cycle instructions.'},
+            {section: 7, num: 81, question: 'What is the frequency accuracy specification?', options: ['±1%', '±0.1%', '±0.01%', '±0.001%'], correct: 2, explanation: 'Crystal has ±100 ppm accuracy (±0.01%).'},
+            {section: 7, num: 82, question: 'Does frequency vary with temperature?', options: ['No', 'Slightly (ppm/°C)', 'Significantly', 'Only during power-up'], correct: 1, explanation: 'Crystal frequency varies slightly with temperature (typical ±100ppm).'},
+            {section: 7, num: 83, question: 'Can you change the clock frequency?', options: ['No', 'Yes, by changing fuses', 'Only in bootloader', 'Only externally'], correct: 1, explanation: 'Clock can be changed via fuse settings or using internal RC oscillator.'},
+            {section: 7, num: 84, question: 'What is the internal RC oscillator frequency?', options: ['4 MHz', '8 MHz', '12 MHz', '16 MHz'], correct: 1, explanation: 'ATmega2560 has built-in 8 MHz RC oscillator as backup.'},
+            {section: 7, num: 85, question: 'Why is frequency stability important?', options: ['For LED brightness', 'For timing-sensitive applications', 'For power efficiency', 'For USB speed'], correct: 1, explanation: 'Stable frequency ensures accurate timing for delays and communication protocols.'},
+
+            // 2.6 LEDs & Reset (12 questions)
+            {section: 8, num: 86, question: 'How many LED indicators are on the board?', options: ['1', '2', '3', '4'], correct: 2, explanation: 'Three LEDs: Power (red), TX (orange), RX (orange).'},
+            {section: 8, num: 87, question: 'What does the Power LED indicate?', options: ['USB connection', 'Code execution', 'Board is powered', 'Sketch uploaded'], correct: 2, explanation: 'Power LED is always on when board has power.'},
+            {section: 8, num: 88, question: 'When does the TX LED blink?', options: ['On power-up', 'During data transmission', 'During compilation', 'Randomly'], correct: 1, explanation: 'TX LED blinks when data is transmitted via serial.'},
+            {section: 8, num: 89, question: 'When does the RX LED blink?', options: ['On power-up', 'On sketch upload', 'During data reception', 'Never'], correct: 2, explanation: 'RX LED blinks when data is received via serial.'},
+            {section: 8, num: 90, question: 'What is the Reset button for?', options: ['Start coding', 'Manually restart the program', 'Power the board', 'Clear memory'], correct: 1, explanation: 'Reset button restarts program execution without clearing flash/EEPROM.'},
+            {section: 8, num: 91, question: 'What happens when Reset is pressed?', options: ['Board powers off', 'sketch execution restarts from setup()', 'EEPROM is erased', 'Bootloader is updated'], correct: 1, explanation: 'Reset causes CPU to restart and execute setup() again.'},
+            {section: 8, num: 92, question: 'Is the Reset button active HIGH or LOW?', options: ['Active HIGH', 'Active LOW', 'Bidirectional', 'No effect'], correct: 1, explanation: 'Reset is active LOW; pressing pulls it to ground.'},
+            {section: 8, num: 93, question: 'Can the RESET pin be controlled externally?', options: ['No', 'Yes, pull LOW', 'Only via bootloader', 'Only via USB'], correct: 1, explanation: 'External reset can be triggered by pulling RESET pin LOW.'},
+            {section: 8, num: 94, question: 'What does auto-reset do?', options: ['Closes USB port', 'Resets board when upload starts', 'Resets on error', 'Resets on overheating'], correct: 1, explanation: 'Auto-reset prepares board for sketch upload.'},
+            {section: 8, num: 95, question: 'Do the LEDs consume program resources?', options: ['Yes, 3 I/O pins', 'Yes, lots of power', 'No, built-in', 'Only in bootloader'], correct: 2, explanation: 'LEDs are separate circuits, not using user-accessible I/O pins.'},
+            {section: 8, num: 96, question: 'What is the LED color scheme typically?', options: ['Red only', 'Red, Green, Blue', 'Red, Orange, Orange', 'All the same'], correct: 2, explanation: 'Power is red; TX and RX are typically orange/amber.'},
+            {section: 8, num: 97, question: 'Can you disable the Power LED?', options: ['Yes, always', 'Yes, if powered externally', 'No, always on', 'Only temporarily'], correct: 2, explanation: 'Power LED cannot be disabled; it indicates power presence.'},
+
+            // 2.7 Pin Headers (10 questions)
+            {section: 9, num: 98, question: 'How are the 54 digital pins arranged?', options: ['Single row', 'Two rows', 'Four corners', 'Random'], correct: 1, explanation: 'Digital pins arranged in two rows: 0-26 left, 27-53 right.'},
+            {section: 9, num: 99, question: 'What is the header pitch (spacing)?', options: ['1mm', '1.27mm', '2.54mm', '5mm'], correct: 2, explanation: '0.1-inch (2.54mm) is Arduino standard header spacing.'},
+            {section: 9, num: 100, question: 'Are all pin rows identical?', options: ['Yes', 'No, different pin functions', 'Only partially', 'Only labeled differently'], correct: 1, explanation: 'Both rows have different functions and pin numbers.'},
+            {section: 9, num: 101, question: 'How many analog pins are available?', options: ['8', '12', '14', '16'], correct: 3, explanation: 'Analog header has 16 pins (A0-A15).'},
+            {section: 9, num: 102, question: 'Where is the 5V pin located?', options: ['Left side', 'Right side', 'Top', 'Mixed'], correct: 2, explanation: 'Power and analog pins (including 5V) on right header.'},
+            {section: 9, num: 103, question: 'How many GND pins are on the headers?', options: ['1', '2', '3', '4'], correct: 3, explanation: '4 ground pins distributed for good grounding.'},
+            {section: 9, num: 104, question: 'What is AREF for?', options: ['Reset button', 'Analog reference voltage', 'All reference', 'Audio frequency'], correct: 1, explanation: 'AREF sets the analog-to-digital conversion reference (default 5V).'},
+            {section: 9, num: 105, question: 'What is IOREF pin for?', options: ['I/O reference voltage', 'IO read enable', 'Interrupt operation', 'Reset signal'], correct: 0, explanation: 'IOREF indicates I/O voltage level (5V for MEGA 2560).'},
+            {section: 9, num: 106, question: 'Can you use jumper wires safely?', options: ['No', 'Yes, with care', 'Only special wires', 'Only in breadboard'], correct: 1, explanation: 'Standard 22 AWG jumper wires work safely with Arduino headers.'},
+            {section: 9, num: 107, question: 'What happens if you insert a pin incorrectly?', options: ['Auto-correct', 'No damage', 'Potential damage', 'Nothing'], correct: 2, explanation: 'Wrong insertion can bend pins or short contacts.'},
+
+            // 2.9 Shared Pins (12 questions)
+            {section: 10, num: 108, question: 'What are shared pins?', options: ['Pins used twice', 'Pins with multiple functions', 'Pins for power', 'Pins for GND'], correct: 1, explanation: 'Shared pins can serve as digital I/O or special functions.'},
+            {section: 10, num: 109, question: 'What special function do pins 0-1 have?', options: ['PWM only', 'Serial RX/TX', 'SPI only', 'I2C only'], correct: 1, explanation: 'Pins 0-1 are Serial0 RX/TX (also usable as digital).'},
+            {section: 10, num: 110, question: 'Which pins can be both PWM and serial?', options: ['2-5', '6-13', '44-46', '50-53'], correct: 0, explanation: 'Pins 2-13 (and 44-46) can do PWM or digital I/O.'},
+            {section: 10, num: 111, question: 'What do pins 50-53 do?', options: ['Only PWM', 'SPI communication', 'Only digital', 'Only analog'], correct: 1, explanation: 'Pins 50-53 are SPI: MISO, MOSI, SCK, SS.'},
+            {section: 10, num: 112, question: 'What special function do pins 20-21 have?', options: ['Serial only', 'SPI only', 'I2C (TWI) SDA/SCL', 'PWM only'], correct: 2, explanation: 'Pins 20-21 are I2C SDA/SCL (also usable as digital).'},
+            {section: 10, num: 113, question: 'Can analog pins A0-A15 be used as digital?', options: ['No', 'Yes', 'Only A0-A8', 'Only with external circuit'], correct: 1, explanation: 'Analog pins can be reconfigured as digital I/O pins.'},
+            {section: 10, num: 114, question: 'What pins are dedicated serial TX/RX?', options: ['0-1 only', '0-1, 18-19', '0-1, 14-17, 18-19', 'All have serial'], correct: 2, explanation: 'MEGA 2560 has Serial0 (0-1), Serial1 (18-19), Serial2 (16-17), Serial3 (14-15).'},
+            {section: 10, num: 115, question: 'What happens if you use pin 0 for both Serial and digital?', options: ['Both work', 'Serial takes priority', 'Digital takes priority', 'Conflict/malfunction'], correct: 3, explanation: 'Using shared pins for multiple functions simultaneously causes conflicts.'},
+            {section: 10, num: 116, question: 'How do you avoid pin conflicts?', options: ['Not possible', 'Use a schematic', 'Plan before coding', 'Trial and error'], correct: 2, explanation: 'Careful planning ensures no pin is used for conflicting functions.'},
+            {section: 10, num: 117, question: 'Can you use pins 2-13 for PWM and digital simultaneously?', options: ['Yes, both at same time', 'Yes, but only one per pin', 'No, never', 'Only with library'], correct: 1, explanation: 'Each pin is one OR the other, not both simultaneously.'},
+            {section: 10, num: 118, question: 'What library enables I2C on pins 20-21?', options: ['Wire', 'Serial', 'SPI', 'PWM'], correct: 0, explanation: 'Wire library enables I2C/TWI communication.'},
+            {section: 10, num: 119, question: 'What library enables SPI on pins 50-53?', options: ['Serial', 'Wire', 'SPI', 'PWM'], correct: 2, explanation: 'SPI library enables SPI communication.'},
+
+            // 3.1 Pin Functions (11 questions)
+            {section: 11, num: 120, question: 'What is the default function of all pins?', options: ['Output', 'Input', 'PWM', 'Analog input'], correct: 1, explanation: 'By default, all digital pins are configured as high-impedance inputs.'},
+            {section: 11, num: 121, question: 'How do you change pin function?', options: ['Rewire board', 'Use pinMode()', 'Change oscillator', 'Modify bootloader'], correct: 1, explanation: 'pinMode(pin, mode) sets INPUT, OUTPUT, or INPUT_PULLUP.'},
+            {section: 11, num: 122, question: 'How is PWM selected on pin 9?', options: ['pinMode()', 'digitalWrite()', 'analogWrite()', 'digitalWrite() HIGH'], correct: 2, explanation: 'analogWrite() enables PWM on compatible pins.'},
+            {section: 11, num: 123, question: 'Are pull-ups enabled by default?', options: ['Yes, all pins', 'Yes, analog only', 'No', 'Only on pins 0-13'], correct: 2, explanation: 'Pull-ups are disabled by default; enable with INPUT_PULLUP.'},
+            {section: 11, num: 124, question: 'How do you enable internal pull-up?', options: ['digitalWrite(pin, HIGH)', 'pinMode(pin, INPUT_PULLUP)', 'analogWrite(pin, 255)', 'Serial.begin()'], correct: 1, explanation: 'pinMode(pin, INPUT_PULLUP) enables internal 20kΩ pull-up.'},
+            {section: 11, num: 125, question: 'What voltage does HIGH represent?', options: ['2.5V', '3.3V', '5V', 'Variable'], correct: 2, explanation: 'HIGH = 5V on MEGA 2560.'},
+            {section: 11, num: 126, question: 'What voltage does LOW represent?', options: ['0V', '1V', '2.5V', 'Ground'], correct: 0, explanation: 'LOW = 0V (ground level).'},
+            {section: 11, num: 127, question: 'What voltage threshold separates HIGH from LOW?', options: ['1V', '2.5V', '3V', '4V'], correct: 1, explanation: 'Approximately 2.5V is the threshold between LOW and HIGH.'},
+            {section: 11, num: 128, question: 'Can pin function be changed in code?', options: ['No, permanent', 'Yes, anytime', 'Only in setup()', 'Only before upload'], correct: 1, explanation: 'Pin function can be reconfigured anytime during execution.'},
+            {section: 11, num: 129, question: 'What happens when you read an output pin?', options: ['Error', 'Returns last written value', 'Returns 0', 'Undefined'], correct: 1, explanation: 'Reading output pin returns the last value written to it.'},
+            {section: 11, num: 130, question: 'Do all pins have the same capabilities?', options: ['Yes', 'No, some are special', 'Only outputs are different', 'Only inputs are different'], correct: 1, explanation: 'Pins have different capabilities: PWM only on 2-13, 44-46; etc.'},
+
+            // 3.2 Pin Mapping (11 questions)
+            {section: 12, num: 131, question: 'What does pin mapping do?', options: ['Maps physical pins to Arduino numbers', 'Maps memory addresses', 'Remaps functions', 'Creates backup'], correct: 0, explanation: 'Pin mapping relates physical ATmega ports to Arduino pin numbers (0-53).'},
+            {section: 12, num: 132, question: 'Why is pin mapping important?', options: ['For aesthetics', 'Hides hardware complexity', 'Improves speed', 'Saves memory'], correct: 1, explanation: 'Mapping provides simple Arduino numbers instead of port/bit names.'},
+            {section: 12, num: 133, question: 'What does Arduino pin 0 map to?', options: ['PE0 (Port E, pin 0)', 'PB0', 'PA0', 'PC0'], correct: 0, explanation: 'Arduino pin 0 = ATmega2560 PE0 (Serial RX).'},
+            {section: 12, num: 134, question: 'What does Arduino pin 1 map to?', options: ['PE0', 'PE1', 'PB1', 'PA1'], correct: 1, explanation: 'Arduino pin 1 = PE1 (Serial TX).'},
+            {section: 12, num: 135, question: 'What does pin 53 map to?', options: ['PB0 (SS)', 'PB7', 'PC7', 'PA7'], correct: 0, explanation: 'Arduino pin 53 = PB0 (SPI Slave Select).'},
+            {section: 12, num: 136, question: 'What does pin 50 map to?', options: ['PB0', 'PB1 (SCK)', 'PB2 (MOSI)', 'PB3 (MISO)'], correct: 3, explanation: 'Arduino pin 50 = PB3 (SPI MISO).'},
+            {section: 12, num: 137, question: 'What is the purpose of understanding pin mapping?', options: ['Direct register access', 'Programming knowledge', 'Both A and B', 'No real purpose'], correct: 2, explanation: 'Understanding mapping helps for advanced programming and debugging.'},
+            {section: 12, num: 138, question: 'Can you program using ATmega port names directly?', options: ['No', 'Yes, but not recommended', 'Yes, for high performance', 'Only in assembly'], correct: 2, explanation: 'You can use direct port manipulation for speed: PORTB, DDRB, PINB, etc.'},
+            {section: 12, num: 139, question: 'Why use Arduino pin numbers instead of port names?', options: ['Cleaner code', 'Easier to learn', 'More portable', 'All of above'], correct: 3, explanation: 'Arduino abstraction is simpler, clearer, and works across board types.'},
+            {section: 12, num: 140, question: 'How many Arduino pins map to Port B?', options: ['4', '8', '10', '16'], correct: 2, explanation: 'Port B (8 bits) maps to multiple Arduino pins including SPI and PWM.'},
+            {section: 12, num: 141, question: 'Do all ATmega ports exist on Arduino MEGA 2560?', options: ['Yes', 'No, some missing', 'Only Port B', 'Only Port E'], correct: 1, explanation: 'Not all internal ports are routed to Arduino headers.'},
+
+            // 3.3 Pin Types (12 questions)
+            {section: 13, num: 142, question: 'How many different pin types exist?', options: ['2', '3', '4', '5'], correct: 2, explanation: 'Digital I/O, Analog input, PWM output (PWM is digital with modulation).'},
+            {section: 13, num: 143, question: 'What is a digital I/O pin?', options: ['Only input', 'Only output', 'Input or output of 0V or 5V', 'Analog sensor pin'], correct: 2, explanation: 'Digital pins are configurable as input (HIGH/LOW) or output (HIGH/LOW).'},
+            {section: 13, num: 144, question: 'What is an analog input pin?', options: ['Digital only', 'Accepts 0-5V continuously', 'PWM signal', 'Power supply'], correct: 1, explanation: 'Analog pins accept continuous 0-5V and convert to 0-1023.'},
+            {section: 13, num: 145, question: 'What is a PWM pin?', options: ['Analog output', 'Digital simulating analog', 'Power pin', 'Ground pin'], correct: 1, explanation: 'PWM is digital signal rapidly switching to simulate analog voltage.'},
+            {section: 13, num: 146, question: 'What is the resolution of digital pins?', options: ['1 bit', '4 bits', '8 bits', '10 bits'], correct: 0, explanation: 'Digital is binary: either HIGH or LOW (1 bit).'},
+            {section: 13, num: 147, question: 'What is the resolution of analog inputs?', options: ['1 bit', '8 bits', '10 bits', '16 bits'], correct: 2, explanation: '10-bit ADC provides 1024 levels (0-1023).'},
+            {section: 13, num: 148, question: 'What is the resolution of PWM output?', options: ['1 bit', '4 bits', '8 bits', '16 bits'], correct: 2, explanation: 'PWM is 8-bit: 0-255 represents 0-100% duty cycle.'},
+            {section: 13, num: 149, question: 'How do you read a digital pin?', options: ['analogRead()', 'digitalRead()', 'pinMode()', 'digitalWrite()'], correct: 1, explanation: 'digitalRead() returns HIGH or LOW.'},
+            {section: 13, num: 150, question: 'How do you read an analog pin?', options: ['digitalRead()', 'analogRead()', 'pinMode()', 'analogWrite()'], correct: 1, explanation: 'analogRead() returns 0-1023 based on 0-5V.'},
+            {section: 13, num: 151, question: 'How do you write PWM to a pin?', options: ['digitalWrite()', 'digitalRead()', 'analogWrite()', 'pinMode()'], correct: 2, explanation: 'analogWrite(pin, 0-255) generates PWM.'},
+            {section: 13, num: 152, question: 'Can you mix pin types on same header?', options: ['No', 'Yes, different pins', 'Only if isolated', 'Never'], correct: 1, explanation: 'Different pins can have different types; same pin cannot do multiple simultaneously.'},
+            {section: 13, num: 153, question: 'What is the fastest digital pin operation speed?', options: ['MHz', 'kHz', 'Hz', 'Limited by clock'], correct: 3, explanation: 'Digital operations limited by 16 MHz clock (62.5ns per cycle).'},
+
+            // 3.3.2 PWM Pins (20 questions)
+            {section: 14, num: 154, question: 'What does PWM stand for?', options: ['Pulse Width Modulation', 'Power Wattage Module', 'Pin Write Mode', 'Periodic Wave Mode'], correct: 0, explanation: 'PWM = Pulse Width Modulation, a digital technique for analog simulation.'},
+            {section: 14, num: 155, question: 'How many PWM pins on MEGA 2560?', options: ['6', '12', '15', '20'], correct: 2, explanation: '15 PWM pins: 2-13 (12) and 44-46 (3).'},
+            {section: 14, num: 156, question: 'What is the default PWM frequency?', options: ['245 Hz', '490 Hz', '980 Hz', '3920 Hz'], correct: 1, explanation: 'Default PWM frequency is ~490 Hz (varies by timer).'},
+            {section: 14, num: 157, question: 'What is the PWM resolution?', options: ['4-bit', '8-bit', '10-bit', '16-bit'], correct: 1, explanation: '8-bit PWM: 0-255 values representing 0-100% duty cycle.'},
+            {section: 14, num: 158, question: 'What is duty cycle?', options: ['Time per cycle', 'Percentage HIGH time', 'Frequency', 'Peak voltage'], correct: 1, explanation: 'Duty cycle % = (HIGH time / Total period) × 100.'},
+            {section: 14, num: 159, question: 'What does 50% duty cycle produce?', options: ['2.5V average', '2.0V average', '3.0V average', '1.25V average'], correct: 0, explanation: '50% of 5V = 2.5V average output.'},
+            {section: 14, num: 160, question: 'What does 100% duty cycle produce?', options: ['0V', '2.5V', '5V', 'Undefined'], correct: 2, explanation: '100% duty cycle = constant 5V (no switching).'},
+            {section: 14, num: 161, question: 'What does 0% duty cycle produce?', options: ['5V', '2.5V', '0V', 'Variable'], correct: 2, explanation: '0% duty cycle = constant 0V (always LOW).'},
+            {section: 14, num: 162, question: 'How do you generate PWM in code?', options: ['digitalWrite()', 'digitalRead()', 'analogWrite()', 'analogRead()'], correct: 2, explanation: 'analogWrite(pin, value) where value is 0-255.'},
+            {section: 14, num: 163, question: 'What pins have PWM from Timer 1?', options: ['2,3,5', '6,7,8', '9,10', '11,12,13'], correct: 3, explanation: 'Timer 1 PWM: pins 11, 12, 13 (OC1A, OC1B, OC1C).'},
+            {section: 14, num: 164, question: 'What pins have PWM from Timer 2?', options: ['2,3,5', '6,7,8', '9,10', '11,12,13'], correct: 2, explanation: 'Timer 2 PWM: pins 9, 10 (OC2A, OC2B).'},
+            {section: 14, num: 165, question: 'What pins have PWM from Timer 3?', options: ['2,3,5', '6,7,8', '9,10', '11,12,13'], correct: 0, explanation: 'Timer 3 PWM: pins 2, 3, 5 (OC3A, OC3B, OC3C).'},
+            {section: 14, num: 166, question: 'What pins have PWM from Timer 4?', options: ['2,3,5', '6,7,8', '9,10', '11,12,13'], correct: 1, explanation: 'Timer 4 PWM: pins 6, 7, 8 (OC4A, OC4B, OC4C).'},
+            {section: 14, num: 167, question: 'What pins have PWM from Timer 5?', options: ['44,45,46', '2,3,5', '9,10', '11,12,13'], correct: 0, explanation: 'Timer 5 PWM: pins 44, 45, 46 (OC5A, OC5B, OC5C).'},
+            {section: 14, num: 168, question: 'What is the PWM period at 490 Hz?', options: ['0.5ms', '1.0ms', '2.0ms', '4.0ms'], correct: 2, explanation: 'Period = 1 / 490 Hz ≈ 2.04 ms.'},
+            {section: 14, num: 169, question: 'How long is HIGH time at 75% duty, 490 Hz?', options: ['0.5ms', '1.02ms', '1.53ms', '2.04ms'], correct: 2, explanation: 'HIGH time = 0.75 × 2.04ms ≈ 1.53ms.'},
+            {section: 14, num: 170, question: 'Can you change PWM frequency?', options: ['No', 'Yes, by changing fuses', 'Yes, by changing timer prescaler', 'Only in bootloader'], correct: 2, explanation: 'PWM frequency changed by modifying timer prescaler values.'},
+            {section: 14, num: 171, question: 'What common application uses PWM?', options: ['Serial communication', 'LED brightness control', 'Digital reading', 'Analog input'], correct: 1, explanation: 'PWM perfectly controls LED brightness and motor speed.'},
+            {section: 14, num: 172, question: 'What is the minimum voltage output with PWM?', options: ['0V', '1V', '2.5V', '5V'], correct: 0, explanation: '0% duty cycle produces 0V minimum.'},
+            {section: 14, num: 173, question: 'What is the maximum voltage output with PWM?', options: ['0V', '2.5V', '3.3V', '5V'], correct: 3, explanation: '100% duty cycle produces 5V maximum.'},
+
+            // Additional Advanced Questions (27 more to reach 200)
+            {section: 14, num: 174, question: 'What is the average voltage at 255 (max PWM)?', options: ['0V', '2.5V', '5V', 'Variable'], correct: 2, explanation: 'analogWrite(pin, 255) = 100% = 5V average.'},
+            {section: 14, num: 175, question: 'What is the average voltage at 0 (min PWM)?', options: ['0V', '1V', '2.5V', '5V'], correct: 0, explanation: 'analogWrite(pin, 0) = 0% = 0V average.'},
+            {section: 1, num: 176, question: 'What is the package type of Arduino MEGA 2560?', options: ['DIP-8', 'DIP-28', 'TQFP-100', 'BGA-196'], correct: 2, explanation: 'ATmega2560 on MEGA 2560 board uses TQFP-100 surface mount package.'},
+            {section: 1, num: 177, question: 'How is the board size classified?', options: ['Small', 'Large', 'Extra-large', 'Standard breadboard compatible'], correct: 0, explanation: 'MEGA 2560 is larger than Uno but smaller than shields.'},
+            {section: 2, num: 178, question: 'What voltage level must shields support?', options: ['3.3V', '5V', 'Either 3.3V or 5V', '12V'], correct: 1, explanation: 'MEGA 2560 is a 5V platform; all shields must support 5V.'},
+            {section: 3, num: 179, question: 'How is the bootloader protected?', options: ['Read-only fuse', 'Separate memory section', 'Lock bits', 'All of above'], correct: 3, explanation: 'Bootloader protected via lock bits and memory organization.'},
+            {section: 4, num: 180, question: 'What is the rated temperature range?', options: ['0-40°C', '0-50°C', '0-70°C', '-40 to +125°C'], correct: 2, explanation: 'ATmega2560 rated -40 to +125°C; board typically 0-70°C.'},
+            {section: 5, num: 181, question: 'How many bits does the ALU process?', options: ['4 bits', '8 bits', '16 bits', '32 bits'], correct: 1, explanation: '8-bit ALU (Arithmetic Logic Unit) processes 8-bit operations.'},
+            {section: 6, num: 182, question: 'What is the dropout voltage of the regulator?', options: ['0.1V', '0.5V', '1V', '2V'], correct: 1, explanation: 'AMS1117 has ~0.5-1V dropout for stable regulation.'},
+            {section: 7, num: 183, question: 'Can clock frequency be adjusted in code?', options: ['Yes, anytime', 'No, fixed', 'Yes, in bootloader', 'Only at startup'], correct: 2, explanation: 'Clock speed set in bootloader via fuse bits; difficult to change later.'},
+            {section: 8, num: 184, question: 'What is the typical LED brightness?', options: ['Very dim', 'Normal visibility', 'Extremely bright', 'Varies'], correct: 1, explanation: 'LEDs are sized for normal visibility without excessive brightness.'},
+            {section: 9, num: 185, question: 'Are headers soldered or removable?', options: ['Removable', 'Soldered', 'Depends on version', 'Always removable'], correct: 1, explanation: 'Pin headers are permanently soldered to the board.'},
+            {section: 10, num: 186, question: 'What happens if you use Serial and pins 0-1 as digital?', options: ['Works fine', 'Serial corrupted', 'Digital pin ignored', 'Both work'], correct: 1, explanation: 'Using pin 0-1 for digital interferes with Serial communication.'},
+            {section: 11, num: 187, question: 'What is the default state after power-on?', options: ['All HIGH', 'All LOW', 'High impedance input', 'PWM mode'], correct: 2, explanation: 'Power-on state: all pins high-impedance inputs.'},
+            {section: 12, num: 188, question: 'What does PORTB represent?', options: ['Port B pins', 'Output register for Port B', 'Specific pins mapped to Arduino', 'All of above'], correct: 3, explanation: 'PORTB is the data register controlling Port B output.'},
+            {section: 13, num: 189, question: 'What is noise immunity on digital pins?', options: ['Low', 'Medium', 'High (~1V hysteresis)', 'Perfect'], correct: 2, explanation: 'Digital pins have built-in hysteresis for noise immunity.'},
+            {section: 13, num: 190, question: 'Can you output analog from digital pins?', options: ['No', 'Yes, with PWM', 'Only with DAC', 'Never'], correct: 1, explanation: 'PWM simulates analog output on digital pins.'},
+            {section: 14, num: 191, question: 'What controls PWM frequency on Timer 1?', options: ['Clock only', 'Prescaler only', 'Both clock and prescaler', 'Cannot be changed'], correct: 2, explanation: 'Prescaler divides clock to set frequency.'},
+            {section: 14, num: 192, question: 'What is the PWM maximum frequency achievable?', options: ['490 Hz', '3920 Hz', '62.5 kHz', 'Higher'], correct: 2, explanation: 'With prescaler 1, PWM reaches ~62.5 kHz.'},
+            {section: 1, num: 193, question: 'What is the weight of Arduino MEGA 2560?', options: ['5g', '25g', '100g', '200g'], correct: 1, explanation: 'Typical weight is around 20-30g depending on accessories.'},
+            {section: 2, num: 194, question: 'What is the most popular shield type?', options: ['Proto', 'Motor', 'WiFi', 'Sensor'], correct: 2, explanation: 'WiFi shields add connectivity, popular for IoT projects.'},
+            {section: 3, num: 195, question: 'How is the bootloader loaded initially?', options: ['Shipped programmed', 'Manual download', 'USB upload', 'Automatic'], correct: 0, explanation: 'Arduino boards ship with bootloader pre-programmed.'},
+            {section: 4, num: 196, question: 'What causes the most board damage?', options: ['Heat', 'Static electricity', 'Short circuits', 'Over-voltage'], correct: 3, explanation: 'Excess voltage (>5.5V) kills components most reliably.'},
+            {section: 6, num: 197, question: 'What is the efficiency of the linear regulator?', options: ['50%', '70%', '90%', 'Variable'], correct: 2, explanation: 'Linear regulators typically 70-90% efficient depending on load.'},
+            {section: 8, num: 198, question: 'What is the lifetime of the board LEDs?', options: ['100 hours', '1000 hours', '10,000+ hours', 'Limited'], correct: 2, explanation: 'Standard LEDs rated 10,000+ hours typical lifetime.'},
+            {section: 13, num: 199, question: 'What is the output impedance of digital pins?', options: ['Very high', 'Very low', 'Medium', 'Variable'], correct: 1, explanation: 'Digital pins have low impedance output (~50Ω typical).'},
+            {section: 14, num: 200, question: 'What is the settling time for PWM output?', options: ['Immediate', '1 cycle', '5 cycles', 'Variable'], correct: 1, explanation: 'PWM output follows command within one PWM cycle.'}
+        ];
+
+        let userAnswers = {};
+        let currentQuestionIndex = 0;
+
+        function displayQuestion() {
+            const q = quizData[currentQuestionIndex];
+            const html = `
+                <div class="question-container">
+                    <div class="question-header">
+                        <span class="question-number">Q${q.num}</span>
+                        <span class="question-category">Section ${q.section}</span>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options" id="optionsContainer-${currentQuestionIndex}">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option" onclick="selectAnswer(${currentQuestionIndex}, ${idx})" id="option-${currentQuestionIndex}-${idx}">
+                                <input type="radio" name="answer" ${userAnswers[currentQuestionIndex] === idx ? 'checked' : ''}>
+                                <span class="option-text">${opt}</span>
+                                <span class="option-badge" id="badge-${currentQuestionIndex}-${idx}"></span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="feedback-${currentQuestionIndex}" class="feedback-message">
+                        <strong id="feedback-title-${currentQuestionIndex}"></strong>
+                        <p id="feedback-text-${currentQuestionIndex}"></p>
+                    </div>
+                    <div id="answerDisplay-${currentQuestionIndex}" class="answer-display">
+                        <h4>📖 Full Explanation:</h4>
+                        <p>${q.explanation}</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('questionDisplay').innerHTML = html;
+            updateNavigation();
+            updateStats();
+        }
+
+        function selectAnswer(qIdx, optIdx) {
+            const q = quizData[qIdx];
+            userAnswers[qIdx] = optIdx;
+            
+            // Clear previous badges
+            document.querySelectorAll(`#optionsContainer-${qIdx} .option-badge`).forEach(badge => {
+                badge.textContent = '';
+            });
+            
+            // Remove previous styling
+            document.querySelectorAll(`#optionsContainer-${qIdx} .option`).forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            
+            // Show user's answer
+            const selectedOption = document.getElementById(`option-${qIdx}-${optIdx}`);
+            const badge = document.getElementById(`badge-${qIdx}-${optIdx}`);
+            const feedbackDiv = document.getElementById(`feedback-${qIdx}`);
+            const feedbackTitle = document.getElementById(`feedback-title-${qIdx}`);
+            const feedbackText = document.getElementById(`feedback-text-${qIdx}`);
+            
+            if (optIdx === q.correct) {
+                // Correct answer
+                selectedOption.classList.add('correct');
+                badge.textContent = '✓ CORRECT';
+                feedbackDiv.classList.add('show', 'feedback-correct');
+                feedbackDiv.classList.remove('feedback-incorrect');
+                feedbackTitle.textContent = '✓ Correct! Well done!';
+                feedbackText.textContent = q.explanation;
+            } else {
+                // Incorrect answer
+                selectedOption.classList.add('incorrect');
+                badge.textContent = '✗ WRONG';
+                
+                // Show correct answer highlighted
+                const correctOption = document.getElementById(`option-${qIdx}-${q.correct}`);
+                const correctBadge = document.getElementById(`badge-${qIdx}-${q.correct}`);
+                correctOption.classList.add('correct');
+                correctBadge.textContent = '✓ CORRECT';
+                
+                feedbackDiv.classList.add('show', 'feedback-incorrect');
+                feedbackDiv.classList.remove('feedback-correct');
+                feedbackTitle.textContent = '✗ Incorrect. The correct answer is:';
+                feedbackText.textContent = q.explanation;
+            }
+            
+            updateStats();
+        }
+
+        function showAnswers() {
+            quizData.forEach((q, idx) => {
+                const elem = document.getElementById(`answerDisplay-${idx}`);
+                if (elem) elem.classList.add('show');
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function jumpToQuestion() {
+            const num = parseInt(document.getElementById('jumpQuestion').value);
+            if (num >= 1 && num <= 200) {
+                currentQuestionIndex = num - 1;
+                displayQuestion();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function goToSection(section) {
+            if (section === '0') {
+                currentQuestionIndex = 0;
+            } else {
+                currentQuestionIndex = quizData.findIndex(q => q.section === parseInt(section));
+            }
+            displayQuestion();
+            window.scrollTo(0, 0);
+        }
+
+        function updateNavigation() {
+            document.getElementById('currentNum').textContent = currentQuestionIndex + 1;
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').disabled = currentQuestionIndex === quizData.length - 1;
+        }
+
+        function updateStats() {
+            const answered = Object.keys(userAnswers).length;
+            let correct = 0;
+            Object.keys(userAnswers).forEach(idx => {
+                if (userAnswers[idx] === quizData[idx].correct) correct++;
+            });
+            const percent = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+            document.getElementById('answered').textContent = answered;
+            document.getElementById('score').textContent = percent + '%';
+        }
+
+        function submitQuiz() {
+            let correct = 0, incorrect = 0, skipped = 0;
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] === undefined) {
+                    skipped++;
+                } else if (userAnswers[idx] === q.correct) {
+                    correct++;
+                } else {
+                    incorrect++;
+                }
+            });
+
+            const score = Math.round((correct / quizData.length) * 100);
+            document.getElementById('finalScore').textContent = score + '%';
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('skippedCount').textContent = skipped;
+
+            let message = '';
+            if (score >= 90) message = '🎉 Excellent! Outstanding performance!';
+            else if (score >= 80) message = '🌟 Very Good! Keep it up!';
+            else if (score >= 70) message = '👍 Good! Review the challenging areas.';
+            else if (score >= 60) message = '📚 Fair. More study recommended.';
+            else message = '⚠️ Keep studying and try again!';
+
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultsContainer').classList.add('show');
+            document.getElementById('navContainer').style.display = 'none';
+            document.getElementById('questionDisplay').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            currentQuestionIndex = 0;
+            document.getElementById('resultsContainer').classList.remove('show');
+            document.getElementById('navContainer').style.display = 'flex';
+            document.getElementById('questionDisplay').style.display = 'block';
+            displayQuestion();
+        }
+
+        function retakeQuiz() {
+            resetQuiz();
+        }
+
+        // Initialize
+        displayQuestion();
+    </script>
+</body>
+</html>
